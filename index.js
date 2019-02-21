@@ -2,7 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-const speed = 10;
+const speed = 100;
 
 app.get('/', function(req, res){
     console.log("Sending bundle react " + __dirname);
@@ -16,7 +16,14 @@ http.listen(5000, function () {
 var positions = require('./positions.json');
 
 io.on('connection', (socket) => {
-    socket.emit('init', positions);
+    socket.emit('update', positions);
+
+    socket.on('repaired', (index) => {
+        if(index >= 0 && index < positions.lamps.length){
+            positions.lamps[index].working = True;
+            socket.emit('update', positions);
+        }
+    });
 
     socket.on('disconnect', () => {
         console.log("Client disconnected")
@@ -25,7 +32,7 @@ io.on('connection', (socket) => {
     const breakLamp = () => {
         var rand = Math.floor(Math.random() * positions.lamps.length);
         positions.lamps[rand].working = false;
-        socket.emit('update', {"pos": rand});
+        socket.emit('update', positions);
         setTimeout(breakLamp, Math.floor(Math.random() * speed * 1000 + 10000));
     }
 
