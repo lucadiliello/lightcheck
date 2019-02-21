@@ -22,12 +22,12 @@ class Main extends Component {
 
     render() {
         return (
-            <Grid textAlign="center" stackable>
-                <Grid.Row divided>
-                    <Grid.Column mobile="four"><MarkerMaps/></Grid.Column>
-                    <Grid.Column mobile="four"><Image src='/images/foto.jpg'/></Grid.Column>
-                    <Grid.Column mobile="four"><Image src='/images/foto.jpg'/></Grid.Column>
-                    <Grid.Column mobile="four"><MarkerMaps/></Grid.Column>
+            <Grid textAlign="center" >
+                <Grid.Row columns="four" divided>
+                    <Grid.Column width="four">Ciaos</Grid.Column>
+                    <Grid.Column width="four"><Image src='/images/foto.jpg'/></Grid.Column>
+                    <Grid.Column width="four"><Image src='/images/foto.jpg'/></Grid.Column>
+                    <Grid.Column width="four">Ciaos</Grid.Column>
                 </Grid.Row>
             </Grid>
         );
