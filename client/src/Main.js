@@ -24,10 +24,10 @@ class Main extends Component {
         return (
             <Grid textAlign="center" stackable>
                 <Grid.Row divided>
-                    <Grid.Column mobile="four"><MarkerMaps/></Grid.Column>
-                    <Grid.Column mobile="four"><Image src='/images/foto.jpg'/></Grid.Column>
-                    <Grid.Column mobile="four"><Image src='/images/foto.jpg'/></Grid.Column>
-                    <Grid.Column mobile="four"><MarkerMaps/></Grid.Column>
+                    <Grid.Column width="four"><MarkerMaps/></Grid.Column>
+                    <Grid.Column width="four"><Image src='/images/foto.jpg'/></Grid.Column>
+                    <Grid.Column width="four"><Image src='/images/foto.jpg'/></Grid.Column>
+                    <Grid.Column width="four"><MarkerMaps/></Grid.Column>
                 </Grid.Row>
             </Grid>
         );
