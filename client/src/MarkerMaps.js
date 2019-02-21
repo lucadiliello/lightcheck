@@ -28,7 +28,7 @@ class MarkerMaps extends Component {
     render(){
         if (this.state.positions)
             return (
-                <div style={{ height: '100vh', width: '100%' }}>
+                <div style={{ height: '80vh', width: '100%' }}>
                     <GoogleMapReact
                         bootstrapURLKeys={{ key: "AIzaSyAYUQBt0jOyQyq8NTS1qYKlndr3N7-uImE" }}
                         defaultCenter={{
