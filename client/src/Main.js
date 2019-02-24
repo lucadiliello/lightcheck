@@ -1,41 +1,56 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Grid, Header, Segment, Image, Divider} from 'semantic-ui-react';
+import { Grid, Header, Segment } from 'semantic-ui-react';
 
 import 'react-activity/dist/react-activity.css';
 import openSocket from 'socket.io-client';
 import './Main.css';
 
-import MarkerMaps from './MarkerMaps';
+import OpenMap from './OpenMap';
 import ControlPanel from './ControlPanel';
+import Manage from './Manage';
 
 var config = require('./config.json');
 const socket = openSocket(config.default_server);
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
 class Main extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            positions: null
+        };
+
+        socket.on('update', data =>
+            this.setState({
+                ...this.state,
+                positions: data
+            })
+        );
+    }
 
     render() {
         return (
-            <Grid textAlign="center" >
-                <Grid.Row>
-                    <Header size='medium' textAlign='center' className="title">Work Trip Manager</Header>
-                </Grid.Row>
-                <Divider/>
-                <Grid.Row columns="2">
-                    <Grid.Column width="twelve"><Segment><MarkerMaps/></Segment></Grid.Column>
-                    <Grid.Column width="four">
-                        <Grid.Row>
-                            <ControlPanel />
+            <div>
+                <Header size='medium' attached className='title'>
+                    <div >
+                        Work Trip Manager v1.0
+                    </div>
+                </Header>
+                <Segment attached>
+                    <Grid textAlign="center" stackable>
+                        <Grid.Row columns="2">
+                            <Grid.Column width="twelve">
+                                <OpenMap positions={this.state.positions}/>
+                            </Grid.Column>
+                            <Grid.Column width="four">
+                                <ControlPanel positions={this.state.positions}/>
+                                <Manage positions={this.state.positions}/>
+                            </Grid.Column>
                         </Grid.Row>
-                        <Grid.Row>
-                            Bellali
-                        </Grid.Row>
-
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+                    </Grid>
+                </Segment>
+            </div>
         );
     }
 }

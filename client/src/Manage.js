@@ -8,7 +8,7 @@ import { Digital } from 'react-activity';
 var config = require('./config.json');
 //const socket = openSocket(config.default_server);
 
-class ControlPanel extends Component {
+class Manage extends Component {
 
     constructor(props){
         super(props);
@@ -39,7 +39,7 @@ class ControlPanel extends Component {
         if(this.state) return (
             <Segment textAlign="left">
                 <Header as='h2' textAlign="center">
-                    Control Panel
+                    Manage
                 </Header>
                 <Progress
                     color={this.getProgressColor()}
@@ -74,4 +74,4 @@ class ControlPanel extends Component {
     }
 }
 
-export default ControlPanel;
+export default Manage;
