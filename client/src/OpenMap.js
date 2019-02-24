@@ -10,25 +10,27 @@ class OpenMap extends Component {
 
     render(){
         return (<Segment>
-            {this.props.positions ?
+            {this.props.lamps ?
                 <Map
                     animate={true}
                     center={{
-                        lat: this.props.positions.station.lat,
-                        lng: this.props.positions.station.lng
-                    }} zoom={this.props.positions.station.zoom}
+                        lat: this.props.center.lat,
+                        lng: this.props.center.lng
+                    }} zoom={this.props.center.zoom}
                     style={{height: '80vh', width: '100%'}}
                 >
                     <TileLayer
-                      attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                        attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
                     />
-                    {this.props.positions.lamps.map( (object, i) =>
+                    {this.props.lamps.map( (object, i) =>
                         <CustomMarker
                             key={i}
                             lat={object.lat}
                             lng={object.lng}
-                            working={object.working}/>)}
+                            working={object.working}
+                            show={this.props.visibility[i]}/>
+                    )}
                 </Map> :
             <Digital />}
         </Segment>);
@@ -36,28 +38,3 @@ class OpenMap extends Component {
 }
 
 export default OpenMap;
-
-
-/*
-<Marker position={this.state.position}>
-    <Popup>A pretty CSS3 popup.<br />Easily customizable.</Popup>
-</Marker>
-
-
-<GoogleMapReact
-    bootstrapURLKeys={{ key: "AIzaSyAYUQBt0jOyQyq8NTS1qYKlndr3N7-uImE" }}
-    defaultCenter={{
-        lat: this.props.positions.station.lat,
-        lng: this.props.positions.station.lng
-    }}
-    defaultZoom={this.props.positions.station.zoom}
->
-    {this.props.positions.lamps.map( (object, i) =>
-        <Marker
-            key={i}
-            lat={object.lat}
-            lng={object.lng}
-            working={object.working}/>)
-    }
-</GoogleMapReact>
-*/

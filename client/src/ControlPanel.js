@@ -17,12 +17,12 @@ class ControlPanel extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
-        if(!nextProps.positions) return null;
-        let working = nextProps.positions.lamps.map( (object, i) => object.working ? 1 : 0).reduce( (a,b) => a + b);
+        if(!nextProps.lamps) return null;
+        let working = nextProps.lamps.map( (object, i) => object.working ? 1 : 0).reduce( (a,b) => a + b);
         return {
-            lampsNumber: nextProps.positions.lamps.length,
+            lampsNumber: nextProps.lamps.length,
             workingLampsNumber: working,
-            brokenLampsNumber: nextProps.positions.lamps.length - working
+            brokenLampsNumber: nextProps.lamps.length - working
         };
     }
 
