@@ -1,12 +1,6 @@
 import React, { Component } from 'react';
-
-import { Segment, Header, Progress, Divider, List, Label } from 'semantic-ui-react';
-
-import openSocket from 'socket.io-client';
+import { Segment, Header, Progress, Divider, Label, Icon} from 'semantic-ui-react';
 import { Digital } from 'react-activity';
-
-var config = require('./config.json');
-//const socket = openSocket(config.default_server);
 
 class ControlPanel extends Component {
 
@@ -48,26 +42,20 @@ class ControlPanel extends Component {
                     progress='ratio' active>
                 </Progress>
                 <Divider />
-                <List divided selection>
-                    <List.Item>
-                        <Label color='blue' horizontal>
-                            Total:
-                        </Label>
-                        {this.state.lampsNumber}
-                    </List.Item>
-                    <List.Item>
-                        <Label color='olive' horizontal>
-                            Working:
-                        </Label>
-                        {this.state.workingLampsNumber}
-                    </List.Item>
-                    <List.Item>
-                        <Label color='yellow' horizontal>
-                            Broken:
-                        </Label>
-                        {this.state.brokenLampsNumber}
-                    </List.Item>
-                </List>
+                <Label.Group circular size='large'>
+                    <Label color='blue' horizontal>
+                        Total: {this.state.lampsNumber}
+                    </Label>
+                    <Label color='olive' horizontal>
+                        <Icon name='thumbs up'/>
+                        Working: {this.state.workingLampsNumber}
+                    </Label>
+                    <Label color='yellow' horizontal>
+                        <Icon name='thumbs down'/>
+                        Broken: {this.state.brokenLampsNumber}
+                    </Label>
+                </Label.Group >
+
             </Segment>
         );
         else return <Digital />;

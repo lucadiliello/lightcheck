@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-
-import { Segment, Header, Progress, Divider, List, Label, Button } from 'semantic-ui-react';
-
-import openSocket from 'socket.io-client';
-import { Digital } from 'react-activity';
-
-var config = require('./config.json');
-//const socket = openSocket(config.default_server);
+import { Segment, Header, Button } from 'semantic-ui-react';
 
 class Manage extends Component {
 
@@ -28,7 +21,7 @@ class Manage extends Component {
 
     render() {
         return (
-            <Segment textAlign="left">
+            <Segment>
                 <Header as='h2' textAlign="center">
                     Manage
                 </Header>

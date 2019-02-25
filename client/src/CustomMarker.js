@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { Icon, Button } from 'semantic-ui-react';
 import { Marker, Popup } from 'react-leaflet';
 
@@ -30,9 +29,15 @@ class CustomMarker extends Component {
     }
 
     render() {
-        if(this.props.show) return <Marker position={[this.props.lat, this.props.lng]} icon={this.props.working ? onIcon : offIcon}>
-                <Popup>A pretty CSS3 popup.<br />Easily customizable.</Popup>
-            </Marker>;
+        if(this.props.show)
+            return <Marker position={[this.props.lat, this.props.lng]} icon={this.props.working ? onIcon : offIcon}>
+                        <Popup>
+                            <Button onClick={() => this.props.selection(this.props.index)} color='teal' icon>
+                                <Icon name='info circle'/>
+                                Info
+                            </Button>
+                        </Popup>
+                    </Marker>;
         return null;
     }
 }
