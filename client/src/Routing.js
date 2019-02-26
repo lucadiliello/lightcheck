@@ -4,7 +4,22 @@ import { withLeaflet } from 'react-leaflet';
 import 'leaflet-routing-machine/src';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
+const config = require('./config.json');
+
 class Routing extends MapLayer {
+
+    componentDidUpdate(prevProps, prevState) {
+        if (!this.arraysEqual(prevProps.road, this.props.road)) {
+            this.leafletElement.setWaypoints(this.props.road);
+        }
+    }
+
+    arraysEqual(arr1, arr2) {
+        if(!arr1 || !arr2) return true;
+        if(arr1.length !== arr2.length) return false;
+        for(var i = arr1.length; i--;) if(arr1[i] !== arr2[i]) return false;
+        return true;
+    }
 
     createLeafletElement() {
         let leafletElement = L.Routing.control({
@@ -23,7 +38,7 @@ class Routing extends MapLayer {
             altLineOptions: { styles: [{opacity: 0}] },
             createMarker: () => { return null; },
             router: new L.Routing.OSRMv1({
-                serviceUrl: 'http://127.0.0.1:5001/route/v1',
+                serviceUrl: config.routing_server,
                 profile: 'driving'
             })
         })

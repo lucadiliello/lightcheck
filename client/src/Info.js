@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Segment, Header } from 'semantic-ui-react';
 import * as esri from 'esri-leaflet-geocoder';
 
-const geocodeService = esri.geocodeService({
+const config = require('./config.json');
 
+const geocodeService = esri.geocodeService({
+    url: config.reverse_server
 });
 
 class Manage extends Component {
@@ -43,7 +45,7 @@ class Manage extends Component {
         return (
             <Segment textAlign='left'>
                 <Header as='h2' textAlign="center">
-                    Info
+                    Lamp Info
                 </Header>
                 <Header as='h4'>
                     Address:

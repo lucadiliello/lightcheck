@@ -11,7 +11,7 @@ const onIcon = new L.Icon({
     iconRetinaUrl: '/icons/lamp_on.svg',
     iconSize: icon_size,
     iconAnchor: [5, 55],
-    popupAnchor: [15, -44],
+    popupAnchor: [10, -50],
 });
 
 const offIcon = new L.Icon({
@@ -19,31 +19,33 @@ const offIcon = new L.Icon({
     iconRetinaUrl: '/icons/lamp_off.svg',
     iconSize: icon_size,
     iconAnchor: [5, 55],
-    popupAnchor: [15, -44],
+    popupAnchor: [10, -50],
 });
 
 class CustomMarker extends Component {
 
-    shouldComponentUpdate(nextProps){
-        return this.props.working !== nextProps.working || this.props.show !== nextProps.show;
+    constructor(props){
+        super(props);
+        this.popup = React.createRef();
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(){
+        this.props.selection(this.props.index);
+        this.popup.current.leafletElement.options.leaflet.map.closePopup();
     }
 
     render() {
         if(this.props.show)
             return <Marker position={[this.props.lat, this.props.lng]} icon={this.props.working ? onIcon : offIcon}>
-                        <Popup>
-                            <Button onClick={() => this.props.selection(this.props.index)} color='teal' icon>
-                                <Icon name='info circle'/>
-                                Info
+                        <Popup ref={this.popup}>
+                            <Button onClick={this.handleClick} color='teal' icon>
+                                <Icon name={this.props.mode === 'info' ? "info" : "selected radio"}/>{this.props.mode === 'info' ? "Info" : "Select"}
                             </Button>
                         </Popup>
                     </Marker>;
         return null;
     }
 }
-
-CustomMarker.defaultProps = {
-    working: true
-};
 
 export default CustomMarker;

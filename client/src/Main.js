@@ -12,6 +12,8 @@ import Manage from './Manage';
 import Info from './Info';
 import Trips from './Trips';
 
+import L from 'leaflet';
+
 var config = require('./config.json');
 const socket = openSocket(config.default_server);
 
@@ -21,14 +23,32 @@ class Main extends Component {
         lamps: undefined,
         center: undefined,
         selected: undefined,
-        visibility: []
+        visibility: [],
+        route: [L.latLng(46.674051, 11.159129), L.latLng(46.678469, 11.141790)],
+        mode: 'info'
     };
+
+    switchMode(){
+        this.setState({
+            ...this.state,
+            mode: this.state.mode === 'info' ? 'selection' : 'info'
+        })
+    }
+
+    setRoute(_route){
+        this.setState({
+            ...this.state,
+            route: _route
+        });
+    }
 
     constructor(props){
         super(props);
 
         this.updateVisibility = this.updateVisibility.bind(this);
         this.updateSelection = this.updateSelection.bind(this);
+        this.setRoute = this.setRoute.bind(this);
+        this.switchMode = this.switchMode.bind(this);
 
         socket.on('update', (data) =>
             this.setState({
@@ -65,6 +85,7 @@ class Main extends Component {
     }
 
     render() {
+
         return (
             <div>
                 <Header as='h2' color='orange' attached className='main-header'>
@@ -78,13 +99,20 @@ class Main extends Component {
                     <Grid textAlign="center" stackable>
                         <Grid.Row columns="2">
                             <Grid.Column width="twelve">
-                                <OpenMap lamps={this.state.lamps} center={this.state.center} visibility={this.state.visibility} selection={this.updateSelection}/>
+                                <OpenMap
+                                    route={this.state.route}
+                                    lamps={this.state.lamps}
+                                    center={this.state.center}
+                                    visibility={this.state.visibility}
+                                    selection={this.updateSelection}
+                                    mode={this.state.mode}
+                                />
                             </Grid.Column>
                             <Grid.Column width="four">
                                 <ControlPanel lamps={this.state.lamps}/>
                                 <Manage lamps={this.state.lamps} update={this.updateVisibility}/>
                                 <Info lamps={this.state.lamps} selected={this.state.selected}/>
-                                <Trips/>
+                                <Trips set={this.setRoute} lamps={this.state.lamps} selected={this.state.selected} switch={this.switchMode}/>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
