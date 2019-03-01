@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Segment, Header, Progress, Divider, Label, Icon} from 'semantic-ui-react';
+import { Segment, Header, Progress } from 'semantic-ui-react';
 import { Digital } from 'react-activity';
+import './ControlPanel.css';
 
 class ControlPanel extends Component {
 
@@ -30,35 +31,19 @@ class ControlPanel extends Component {
     }
 
     render() {
-        if(this.state) return (
+        return (
             <Segment textAlign="left">
-                <Header as='h2' textAlign="center">
-                    Control Panel
+                <Header as='h2' className='header'>
+                    Working Lamps
                 </Header>
-                <Progress
+                {this.state ?
+                <Progress className='progress-bar'
                     color={this.getProgressColor()}
                     value={this.state.workingLampsNumber}
                     total={this.state.lampsNumber}
-                    progress='ratio' active>
-                </Progress>
-                <Divider />
-                <Label.Group circular size='large'>
-                    <Label color='blue' horizontal>
-                        Total: {this.state.lampsNumber}
-                    </Label>
-                    <Label color='olive' horizontal>
-                        <Icon name='thumbs up'/>
-                        Working: {this.state.workingLampsNumber}
-                    </Label>
-                    <Label color='yellow' horizontal>
-                        <Icon name='thumbs down'/>
-                        Broken: {this.state.brokenLampsNumber}
-                    </Label>
-                </Label.Group >
-
+                    progress='ratio' active/> : <Digital />}
             </Segment>
         );
-        else return <Digital />;
     }
 }
 

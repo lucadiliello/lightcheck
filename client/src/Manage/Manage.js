@@ -23,10 +23,7 @@ class Manage extends Component {
         return (
             <Segment>
                 <Header as='h2' textAlign="center">
-                    Manage
-                </Header>
-                <Header as='h4' textAlign="left">
-                    Show lamps:
+                    Show
                 </Header>
                 <Button.Group fluid>
                     <Button primary disabled={this.state.choice === 'all'} onClick={() => this.handleClick('all')}>All</Button>
