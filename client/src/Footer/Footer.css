@@ -1,0 +1,11 @@
+.footer-props {
+    height: 100px;
+    background-color: #34495E;
+    color: gray;
+}
+
+.column {
+    text-align: center;
+    color: inherit;
+    vertical-align: middle;
+}

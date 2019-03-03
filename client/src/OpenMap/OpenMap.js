@@ -34,7 +34,6 @@ class OpenMap extends Component {
                         attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> Hosted with <3 by Luca Di Liello"
                         url={config.tile_server}
                     />
-
                     <HomeMarker lat={this.props.center.lat} lng={this.props.center.lng}/>
                     {this.props.lamps.map( (object, i) =>
                         <LampMarker

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Segment, Header, Label, List } from 'semantic-ui-react';
-import { Digital } from 'react-activity';
-import axios from 'axios';
 import './Info.css';
-const config = require('../Config/config.json');
 
 class Manage extends Component {
 

@@ -2,13 +2,14 @@ import L from 'leaflet';
 
 let icon_size = [30, 40];
 let anchor_point = [15, 20];
+let popup_anchor = [0, -15];
 
 export const HomeIcon = new L.icon({
     iconUrl: '/icons/home.svg',
     iconRetinaUrl: '/icons/home.svg',
     iconSize: icon_size,
     iconAnchor: anchor_point,
-    popupAnchor: [10, -50],
+    popupAnchor: popup_anchor,
 });
 
 export const onIcon = new L.Icon({
@@ -16,7 +17,7 @@ export const onIcon = new L.Icon({
     iconRetinaUrl: '/icons/lamp_on.svg',
     iconSize: icon_size,
     iconAnchor: anchor_point,
-    popupAnchor: [10, -50],
+    popupAnchor: popup_anchor,
 });
 
 export const offIcon = new L.Icon({
@@ -24,5 +25,5 @@ export const offIcon = new L.Icon({
     iconRetinaUrl: '/icons/lamp_off.svg',
     iconSize: icon_size,
     iconAnchor: anchor_point,
-    popupAnchor: [10, -50],
+    popupAnchor: popup_anchor,
 });

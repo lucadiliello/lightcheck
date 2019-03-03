@@ -13,6 +13,7 @@
     "react-activity": "^1.2.2",
     "react-devtools": "^3.6.0",
     "react-dom": "^16.8.2",
+    "react-google-calendar-api": "^1.0.10",
     "react-indicators": "^0.3.7",
     "react-leaflet": "^2.2.1",
     "react-scripts": "2.1.5",

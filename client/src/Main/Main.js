@@ -11,6 +11,8 @@ import ControlPanel from '../ControlPanel/ControlPanel';
 import Manage from '../Manage/Manage';
 import Info from '../Info/Info';
 import Trips from '../Trips/Trips';
+import Footer from '../Footer/Footer';
+import Intestation from '../Intestation/Intestation';
 
 var config = require('../Config/config.json');
 const socket = openSocket(config.default_server);
@@ -133,13 +135,7 @@ class Main extends Component {
     render() {
         return (
             <div>
-                <Header as='h2' color='orange' attached className='main-header'>
-                    <Icon circular name='lightbulb outline'/>
-                    <Header.Content>
-                        Work Trip Manager
-                        <Header.Subheader>version 1.0</Header.Subheader>
-                    </Header.Content>
-                </Header>
+                <Intestation/>
                 <Segment attached>
                     <Grid textAlign="center" stackable>
                         <Grid.Row columns="2">
@@ -170,6 +166,7 @@ class Main extends Component {
                         </Grid.Row>
                     </Grid>
                 </Segment>
+                <Footer/>
             </div>
         );
     }

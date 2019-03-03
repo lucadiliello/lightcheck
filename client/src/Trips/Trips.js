@@ -83,17 +83,16 @@ class Trips extends Component {
         this.setState({
             ...this.state,
             loading: true
-        }, () => axios({
-                method:'get',
-                url: request,
-                responseType:'json'
-            }).then((response) => {
+        }, () => axios.get(request)
+            .then((res) => {
                 let best;
-                if(this.state.start_from_warehouse){
-                    best = response.data.waypoints.map((object, i) => object.waypoint_index - 1);
+                if (this.state.start_from_warehouse) {
+                    best = res.data.waypoints.map((object, i) => object.waypoint_index - 1);
                     best.shift();
                 }
-                else best = response.data.waypoints.map((object, i) => object.waypoint_index);
+                else {
+                    best = res.data.waypoints.map((object, i) => object.waypoint_index);
+                }
                 this.setState({
                     ...this.state,
                     loading: false,
@@ -112,9 +111,11 @@ class Trips extends Component {
     }
 
     autoSelect(){
+        let notWorking = [];
+        for (var i in this.props.lamps) if (!this.props.lamps[i].working) notWorking.push(i);
         this.setState({
             ...this.state,
-            selection: this.props.lamps.filter((object, i) => !object.working).map((object, i) => i)
+            selection: notWorking
         });
     }
 
@@ -154,7 +155,7 @@ class Trips extends Component {
                     .map((object, i) => this.props.lamps[object])
                     .map((point, i) =>
                         (<List.Item key={i}>
-                            <Card className='item'>
+                            <Card className='item' fluid>
                                 <Card.Content>
                                     <Card.Description>{point.address}</Card.Description>
                                     <Card.Meta>

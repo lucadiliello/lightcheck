@@ -1,12 +1,4 @@
-.title {
-    color: #61dafb;
-    vertical-align: middle;
-}
-
-.main-header {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.main {
+    background-color: #E8F8F5;
+    padding: 8px;
 }
