@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Header, Segment, Icon } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 import 'react-activity/dist/react-activity.css';
 import openSocket from 'socket.io-client';
 import './Main.css';
@@ -13,6 +13,7 @@ import Info from '../Info/Info';
 import Trips from '../Trips/Trips';
 import Footer from '../Footer/Footer';
 import Intestation from '../Intestation/Intestation';
+import Calendar from '../Calendar/Calendar';
 
 var config = require('../Config/config.json');
 const socket = openSocket(config.default_server);
@@ -162,6 +163,7 @@ class Main extends Component {
                                     switch={this.switchMode}
                                     mode={this.state.mode}
                                     reset={this.reset}/>
+                                <Calendar/>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>

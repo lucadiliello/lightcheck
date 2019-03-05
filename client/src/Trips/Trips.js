@@ -79,7 +79,6 @@ class Trips extends Component {
         request += this.state.selection.map((object, i) => `${this.props.lamps[object].lng},${this.props.lamps[object].lat}`).join(';');
         request += '?source=first';
         if(this.state.start_from_warehouse) request += '&roundtrip=true';
-        console.log(request);
         this.setState({
             ...this.state,
             loading: true
