@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Header, Button, Popup, List, Label, Card, Container, Form } from 'semantic-ui-react';
+import { Segment, Header, Button, Popup, List, Label, Form, Divider, Grid, Message } from 'semantic-ui-react';
 import './Trips.css';
 import axios from 'axios';
 import L from 'leaflet';
@@ -11,7 +11,7 @@ class Trips extends Component {
     state = {
         selection: [],
         loading: false,
-        start_from_warehouse: true
+        startFromWarehouse: true
     }
 
     constructor(props){
@@ -22,10 +22,11 @@ class Trips extends Component {
         this.optimiseList = this.optimiseList.bind(this);
         this.clear = this.clear.bind(this);
         this.autoSelect = this.autoSelect.bind(this);
+        this.getWarehouse = this.getWarehouse.bind(this);
     }
 
     componentDidUpdate(){
-        if((this.props.mode === 'selection') && this.props.selected && this.props.selected.fresh){
+        if((this.props.mode === 'selection') && this.props.selected.value && this.props.selected.fresh){
             if(this.state.selection.indexOf(this.props.selected.value) === -1){
                 this.add(this.props.selected.value);
             }
@@ -33,36 +34,26 @@ class Trips extends Component {
     }
 
     add(element){
-        let newArray = this.state.selection;
-        newArray.push(element);
         this.setState({
             ...this.state,
-            selection: newArray
+            selection: this.state.selection.concat([element])
         }, this.props.reset());
     }
 
-    remove(index){
-        let newArray = this.state.selection;
-        newArray.splice(index, 1);
+    remove(element){
         this.setState({
             ...this.state,
-            selection: newArray
+            selection: this.state.selection.filter((item, j) => item !== element)
         });
     }
 
-    swap(list, pos_a, pos_b){
-        let tmp = list[pos_a];
-        list[pos_a] = list[pos_b];
-        list[pos_b] = tmp;
-    }
-
     move(index, direction){
-        if((index === 0 && direction === 'up') || (index === (this.state.selection.length-1) && direction === 'down')) return;
-        let newArray = this.state.selection;
-        this.swap(newArray, index, direction === 'down' ? index + 1 : index - 1);
         this.setState({
             ...this.state,
-            selection: newArray
+            selection: this.state.selection
+                .slice(0, direction === 'up' ? (index - 1) : index)
+                .concat([this.state.selection[direction === 'up' ? index : (index + 1)], this.state.selection[direction === 'up' ? (index - 1) : index]])
+                .concat(this.state.selection.slice(direction === 'up' ? (index + 1) : (index + 2)))
         });
     }
 
@@ -70,118 +61,131 @@ class Trips extends Component {
         this.setState({
             ...this.state,
             selection: [],
-        }, () => this.props.set([]));
+        });
+        this.props.set([]);
+    }
+
+    getWarehouse(){
+        return this.props.lamps.find((a) => a.status === 'main');
     }
 
     optimiseList(){
         var request = config.osrm_server + '/trip/v1/driving/';
-        if(this.state.start_from_warehouse) request += `${this.props.center.lat},${this.props.center.lng};`;
-        request += this.state.selection.map((object, i) => `${this.props.lamps[object].lng},${this.props.lamps[object].lat}`).join(';');
+        let warehouse = this.getWarehouse();
+        if(this.state.startFromWarehouse && warehouse) request += `${warehouse.lat},${warehouse.lng};`;
+        request += this.state.selection.map((e) => `${e.lng},${e.lat}`).join(';');
         request += '?source=first';
-        if(this.state.start_from_warehouse) request += '&roundtrip=true';
+        if(this.state.startFromWarehouse && warehouse) request += '&roundtrip=true';
         this.setState({
             ...this.state,
             loading: true
         }, () => axios.get(request)
             .then((res) => {
-                let best;
-                if (this.state.start_from_warehouse) {
-                    best = res.data.waypoints.map((object, i) => object.waypoint_index - 1);
-                    best.shift();
+                let indexes;
+                if (this.state.startFromWarehouse) {
+                    indexes = res.data.waypoints.map((object, i) => object.waypoint_index - 1);
+                    indexes.shift();
                 }
                 else {
-                    best = res.data.waypoints.map((object, i) => object.waypoint_index);
+                    indexes = res.data.waypoints.map((object, i) => object.waypoint_index);
                 }
                 this.setState({
                     ...this.state,
                     loading: false,
-                    selection: best.map((object, i) => this.state.selection[object])
+                    selection: indexes.map((object, i) => this.state.selection[object])
                 }, () => this.props.set(this.getRoute()));
             })
         );
     }
 
     getRoute(){
-        let base = this.state.selection.map((object, i) => this.props.lamps[object]).map((object, i) => L.latLng(object.lat, object.lng));
-        let center = L.latLng(this.props.center.lat, this.props.center.lng);
-        return this.state.start_from_warehouse ?
-            [center].concat(base).concat([center]) :
+        let warehouse = (a => L.latLng(a.lat, a.lng))(this.getWarehouse());
+        let base = this.state.selection.map((point, i) => L.latLng(point.lat, point.lng));
+        return this.state.startFromWarehouse ?
+            [warehouse].concat(base).concat([warehouse]) :
             base;
     }
 
     autoSelect(){
-        let notWorking = [];
-        for (var i in this.props.lamps) if (!this.props.lamps[i].working) notWorking.push(i);
         this.setState({
             ...this.state,
-            selection: notWorking
+            selection: this.props.lamps.filter((a) => (a.status === 'broken' || a.status === 'dead'))
         });
     }
 
     render(){
-        return (<Segment textAlign='left'>
-            <Header as='h2' textAlign="center">
-                Generate a Trip
-            </Header>
-            <Form>
-                <Form.Group widths='equal'>
-                    <Form.Button fluid onClick={this.props.switch} color={this.props.mode === 'selection' ? 'red' : 'blue'}>
-                        {this.props.mode === 'selection' ? 'Stop selection' : 'Start selection'}
-                    </Form.Button>
-                    <Popup trigger={<Form.Button fluid onClick={this.autoSelect} primary>
-                        Auto select
-                    </Form.Button>} content='Automatically select all non-working lamps'/>
-                </Form.Group>
-                <Form.Checkbox
-                    label='Roundtrip from/to warehouse'
-                    onChange={() => this.setState({...this.state, start_from_warehouse: !this.state.start_from_warehouse})}
-                    checked={this.state.start_from_warehouse} />
-                <Form.Group widths='equal'>
-                    <Form.Button
-                        fluid onClick={this.optimiseList}
-                        primary loading={this.state.loading}
-                        disabled={!((this.state.selection.length > 0 && this.state.start_from_warehouse) || this.state.selection.length > 1)}>
-                        Generate Route
-                    </Form.Button>
-                    <Form.Button fluid onClick={this.clear} color='red' disabled={this.state.selection.length === 0}>
-                        Clear
-                    </Form.Button>
-                </Form.Group>
-            </Form>
-
-            <List className='list'>
-                {this.state.selection
-                    .map((object, i) => this.props.lamps[object])
-                    .map((point, i) =>
-                        (<List.Item key={i}>
-                            <Card className='item' fluid>
-                                <Card.Content>
-                                    <Card.Description>{point.address}</Card.Description>
-                                    <Card.Meta>
-                                        <Container>
-                                            <Popup content='Remove' trigger={
+        return (
+            <Segment textAlign='left'>
+                <Header as='h2' textAlign="center">
+                    Generate a Trip
+                </Header>
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column width={6}>
+                            <Segment>
+                                <Form>
+                                    <Form.Button fluid onClick={this.props.switch} color={this.props.mode === 'selection' ? 'red' : 'blue'}>
+                                        {this.props.mode === 'selection' ? 'Stop selection' : 'Start selection'}
+                                    </Form.Button>
+                                    <Popup trigger={<Form.Button fluid onClick={this.autoSelect} primary>
+                                        Auto select
+                                    </Form.Button>} content='Automatically select all non-working lamps'/>
+                                    <Form.Checkbox
+                                        label='Roundtrip from/to warehouse'
+                                        onChange={() => this.setState({
+                                            ...this.state,
+                                            startFromWarehouse: !this.state.startFromWarehouse
+                                        })}
+                                        checked={this.state.startFromWarehouse} />
+                                </Form>
+                            </Segment>
+                            <Segment>
+                                <Form>
+                                    <Form.Button
+                                        fluid onClick={this.optimiseList}
+                                        primary loading={this.state.loading}
+                                        disabled={!((this.state.selection.length > 0 && this.state.startFromWarehouse) || this.state.selection.length > 1)}>
+                                        Generate Route
+                                    </Form.Button>
+                                    <Form.Button fluid onClick={this.clear} color='red' disabled={this.state.selection.length === 0}>
+                                        Clear
+                                    </Form.Button>
+                                </Form>
+                            </Segment>
+                        </Grid.Column>
+                        <Grid.Column width={10}>
+                            <List className='trip-list'>
+                                {this.state.selection.map((point, i) =>
+                                    (<List.Item key={i}>
+                                        <Message>
+                                            <Message.Header>
+                                                <Label circular content={'N. ' + i}/>
+                                                <Label circular color={point.status === 'working' ? 'green' : (point.status === 'broken' ? 'yellow' : 'red')}>
+                                                    {point.status.replace(/^\w/, c => c.toUpperCase())}
+                                                </Label>
                                                 <Button
                                                     icon='delete' circular compact
-                                                    size='tiny' color='teal'
-                                                    onClick={() => this.remove(i)}/>}/>
-                                            <Popup content='Move Up' trigger={
-                                                <Button icon='angle up' circular compact
-                                                    size='tiny' color='teal'
-                                                    onClick={() => this.move(i, 'up')}/>}/>
-                                            <Popup content='Move Down' trigger={
-                                                <Button icon='angle down' circular compact
-                                                    size='tiny' color='teal'
-                                                    onClick={() => this.move(i, 'down')}/>}/>
-                                            <Label circular color={point.working ? 'olive' : 'yellow'}>{point.working ? 'Working' : 'Broken'}</Label>
-                                        </Container>
-                                    </Card.Meta>
-                                </Card.Content>
-                            </Card>
-                        </List.Item>)
-                    )
-                }
-            </List>
-        </Segment>);
+                                                    size='small' color='teal'
+                                                    onClick={() => this.remove(point)}/>
+                                                <Button icon='angle up' circular compact disabled={!(i > 0)}
+                                                    size='small' color='teal'
+                                                    onClick={() => this.move(i, 'up')}/>
+                                                <Button icon='angle down' circular compact disabled={!(i < (this.state.selection.length - 1))}
+                                                    size='small' color='teal'
+                                                    onClick={() => this.move(i, 'down')}/>
+                                            </Message.Header>
+                                                <p>
+                                                    {point.address}
+                                                </p>
+                                          </Message>
+                                       </List.Item>))
+                                }
+                            </List>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Segment>
+        );
     }
 }
 

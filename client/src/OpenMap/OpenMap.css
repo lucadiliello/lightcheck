@@ -1,0 +1,9 @@
+.container {
+    height: 80vh;
+    width: 100%;
+    min-height: 600px;
+}
+
+.map {
+    height: 100%;
+}

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Segment, Header, Button } from 'semantic-ui-react';
+import { Segment, Header, Button, Divider } from 'semantic-ui-react';
+import './Manage.css';
 
 class Manage extends Component {
 
     state = {
-        choice: 'all'
+        status: 'all'
     };
 
     constructor(props){
@@ -15,23 +16,23 @@ class Manage extends Component {
     handleClick(_choice){
         this.setState({
             ...this.state,
-            choice: _choice
+            status: _choice
         }, this.props.update(_choice));
     }
 
     render() {
         return (
             <Segment>
-                <Header as='h2' textAlign="center">
-                    Show
+                <Header as='h2'>
+                    View options
                 </Header>
-                <Button.Group fluid>
-                    <Button primary disabled={this.state.choice === 'all'} onClick={() => this.handleClick('all')}>All</Button>
-                    <Button.Or />
-                    <Button primary disabled={this.state.choice === 'working'} onClick={() => this.handleClick('working')}>Working</Button>
-                    <Button.Or />
-                    <Button primary disabled={this.state.choice === 'broken'} onClick={() => this.handleClick('broken')}>Broken</Button>
-                </Button.Group>
+                    <Button size='small' fluid primary inverted disabled={this.state.status === 'all'} onClick={() => this.handleClick('all')}>All</Button>
+                    <Divider/>
+                    <Button size='small' fluid color='green' inverted disabled={this.state.status === 'working'} onClick={() => this.handleClick('working')}>Working</Button>
+                    <Divider/>
+                    <Button size='small' fluid color='yellow' inverted disabled={this.state.status === 'broken'} onClick={() => this.handleClick('broken')}>Broken</Button>
+                    <Divider/>
+                    <Button size='small' fluid color='red' inverted disabled={this.state.status === 'dead'} onClick={() => this.handleClick('dead')}>Dead</Button>
             </Segment>
         );
     }

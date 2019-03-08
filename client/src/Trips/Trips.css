@@ -1,9 +1,9 @@
-.list {
+.trip-list {
     overflow-y: auto;
-    max-height: 20vh;
-    padding: 3px;
+    max-height: 300px;
+    padding: 5px;
 }
 
-.item {
-    margin: 5px;
+.trip-item {
+    height: 60px;
 }

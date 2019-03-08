@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Icon, Button } from 'semantic-ui-react';
 import { Marker, Popup } from 'react-leaflet';
 
-import { onIcon, offIcon } from './Icons';
+import { OnIcon, OffIcon, DeadIcon, HomeIcon } from './Icons';
 
 class LampMarker extends Component {
 
@@ -13,20 +13,42 @@ class LampMarker extends Component {
     }
 
     handleClick(){
-        this.props.selection(this.props.index);
+        this.props.set(this.props.point);
         this.props.map.current.leafletElement.closePopup();
     }
 
     render() {
-        if(this.props.show)
-            return (<Marker position={[this.props.lat, this.props.lng]} icon={this.props.working ? onIcon : offIcon}>
-                    <Popup ref={this.popup} color="black" style={{opacity: 0.2}}>
+        let icon;
+        switch (this.props.point.status) {
+            case 'working':
+                icon = OnIcon;
+                break;
+            case 'broken':
+                icon = OffIcon;
+                break;
+            case 'dead':
+                icon = DeadIcon;
+                break;
+            case 'main':
+                icon = HomeIcon;
+                break;
+            default:
+                icon = DeadIcon;
+                break;
+        }
+
+        if((this.props.point.status === this.props.visibility) || (this.props.visibility === 'all')) {
+            return (
+                <Marker position={[this.props.point.lat, this.props.point.lng]} icon={icon}>
+                    <Popup ref={this.popup} color="black" className='lamp-marker'>
                         <Button onClick={this.handleClick} color='teal' icon>
                             <Icon name={this.props.mode === 'info' ? "info" : "selected radio"}/> {this.props.mode === 'info' ? "Info" : "Select"}
                         </Button>
                     </Popup>
-                </Marker>);
-        return null;
+                </Marker>
+            );
+        }
+        else return null;
     }
 }
 

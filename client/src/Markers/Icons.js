@@ -12,7 +12,7 @@ export const HomeIcon = new L.icon({
     popupAnchor: popup_anchor,
 });
 
-export const onIcon = new L.Icon({
+export const OnIcon = new L.Icon({
     iconUrl: '/icons/lamp_on.svg',
     iconRetinaUrl: '/icons/lamp_on.svg',
     iconSize: icon_size,
@@ -20,10 +20,18 @@ export const onIcon = new L.Icon({
     popupAnchor: popup_anchor,
 });
 
-export const offIcon = new L.Icon({
+export const OffIcon = new L.Icon({
     iconUrl: '/icons/lamp_off.svg',
     iconRetinaUrl: '/icons/lamp_off.svg',
     iconSize: icon_size,
+    iconAnchor: anchor_point,
+    popupAnchor: popup_anchor,
+});
+
+export const DeadIcon = new L.Icon({
+    iconUrl: '/icons/lamp_dead.png',
+    iconRetinaUrl: '/icons/lamp_dead.png',
+    iconSize: [26,26],
     iconAnchor: anchor_point,
     popupAnchor: popup_anchor,
 });

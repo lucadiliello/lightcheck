@@ -1,300 +1,299 @@
 {
-    "station": {
-        "lat": 46.669575,
-        "lng": 11.159550,
-        "zoom": 15
-    },
-
     "lamps": [
+        {
+            "lat": 46.671218,
+            "lng": 11.152750,
+            "status": "main"
+        },
         {
             "lat": 46.667293,
             "lng": 11.141869,
-            "working": true
+            "status": "working"
         },
         {
             "lat": 46.669520,
             "lng": 11.146627,
-            "working": true
+            "status": "working"
         },
         {
             "lat":46.670262,
             "lng":11.150988,
-            "working": true
+            "status": "working"
         },
         {
         	"lat":46.672216,
         	"lng":11.148681,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.673626,
         	"lng":11.146950,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.676248,
         	"lng":11.143561,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.674498,
         	"lng":11.151444,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.676891,
         	"lng":11.148247,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.675679,
         	"lng":11.153439,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.673033,
         	"lng":11.154196,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.674863,
         	"lng":11.156864,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.676620,
         	"lng":11.158991,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.677856,
         	"lng":11.155746,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.679167,
         	"lng":11.153114,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.677793,
         	"lng":11.151948,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.671086,
         	"lng":11.154850,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.671068,
         	"lng":11.156282,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.670770,
         	"lng":11.159453,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.673507,
         	"lng":11.161678,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.670752,
         	"lng":11.161806,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.670242,
         	"lng":11.164721,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.671007,
         	"lng":11.168042,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.669691,
         	"lng":11.167172,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.665638,
         	"lng":11.144642,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.667639,
         	"lng":11.150140,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.668709,
         	"lng":11.153183,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.669867,
         	"lng":11.159448,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.663760,
         	"lng":11.148554,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.661057,
         	"lng":11.148580,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.664585,
         	"lng":11.153490,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.666849,
         	"lng":11.156431,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.668692,
         	"lng":11.156226,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.666551,
         	"lng":11.158374,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.664269,
         	"lng":11.159167,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.661795,
         	"lng":11.160266,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.659232,
         	"lng":11.153976,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.669062,
         	"lng":11.171999,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.658968,
         	"lng":11.146074,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.666147,
         	"lng":11.153976,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.661022,
         	"lng":11.162338,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.659319,
         	"lng":11.165637,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.656827,
         	"lng":11.168015,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.662725,
         	"lng":11.162952,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.664760,
         	"lng":11.161238,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.665094,
         	"lng":11.163297,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.665261,
         	"lng":11.165625,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.666507,
         	"lng":11.165445,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.663532,
         	"lng":11.167798,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.662470,
         	"lng":11.168655,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.662128,
         	"lng":11.164844,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.661066,
         	"lng":11.162415,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.659846,
         	"lng":11.167555,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.659100,
         	"lng":11.170905,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.657099,
         	"lng":11.162095,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.658266,
         	"lng":11.159474,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.667921,
         	"lng":11.168989,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.671027,
         	"lng":11.171847,
-        	"working":true
+        	"status":"working"
         },
         {
         	"lat":46.662624,
         	"lng":11.167468,
-        	"working":true
+        	"status":"working"
         }
     ]
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ApiCalendar from './ApiCalendar';
 import { Segment, Header, Form, Popup } from 'semantic-ui-react';
-import { DateTimeInput } from 'semantic-ui-calendar-react';
+import { DateTimeInput, TimeInput } from 'semantic-ui-calendar-react';
 import moment from 'moment';
 
 class Calendar extends Component {
@@ -9,11 +9,11 @@ class Calendar extends Component {
     state = {
         calendars: {
             list: [],
-            selected: undefined,
             loading: false
         },
         signed: ApiCalendar.sign,
-        start_time: ''
+        start_time: '',
+        fix_time: '30:00'
     }
 
     constructor(props) {
@@ -85,23 +85,15 @@ class Calendar extends Component {
         }
     }
 
-    getRFC3339(date){
-        return moment(date).format("YYYY-MM-DDTHH:mm:ssZ")
-    }
-
     addEvent() {
-        let target = new Date(this.state.start_time);
-        let date1 = new Date(target);
-        target.setHours(target.getHours()+2);
-        let date2 = new Date(target);
-        console.log(date1.toISOString());
-        console.log(date2);
+        let target = moment(this.state.start_time, 'dd-mm-yyyy hh:mm');
+
         ApiCalendar.createEvent({
             start: {
-                dateTime: date1.toISOString()
+                dateTime: target.format("YYYY-MM-DDTHH:mm:ssZ")
             },
             end: {
-                dateTime: date2.toISOString()
+                dateTime: target.add(2, 'hours').format("YYYY-MM-DDTHH:mm:ssZ")
             },
             summary: "Meet with Passerini"
 
@@ -132,12 +124,12 @@ class Calendar extends Component {
                         </Form.Button>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Dropdown fluid width={13} placeholder='Select a calendar' fluid selection options={this.getCalendars()} onChange={this.setCalendar}/>
+                        <Form.Dropdown width={13} placeholder='Using default calendar' fluid selection options={this.getCalendars()} onChange={this.setCalendar}/>
                         <Popup content='Update calendar list' trigger={
                             <Form.Button fluid width={3} icon='refresh' onClick={this.updateCalendars} loading={this.state.calendars.loading} primary/>
                         }/>
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group widths='equal'>
                         <DateTimeInput
                             label='Starting date and time'
                             value={this.state.start_time}
@@ -148,6 +140,17 @@ class Calendar extends Component {
                                    this.setState({
                                        ...this.state,
                                        start_time: value
+                                   })
+                            }/>
+                        <TimeInput
+                            label='Estimated time for fixing a lamp'
+                            value={this.state.fix_time}
+                            iconPosition="left"
+                            onChange={
+                               (event, {name, value}) =>
+                                   this.setState({
+                                       ...this.state,
+                                       fix_time: value
                                    })
                             }/>
                     </Form.Group>

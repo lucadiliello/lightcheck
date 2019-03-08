@@ -1,0 +1,11 @@
+.header {
+    text-align: center;
+}
+
+.progress-bar {
+    min-width: 20%;
+}
+
+.control-segment {
+    text-align: left;
+}
