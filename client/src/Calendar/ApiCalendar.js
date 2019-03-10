@@ -180,11 +180,11 @@ class ApiCalendar {
         });
     }
 
-    deleteEvent(eventId, calendarId = this.calendar) {
-        return this.gapi.client.calendar.events.delete({
-            'calendarId': calendarId,
+    deleteEvent(eventId, onSuccess, onError) {
+        this.gapi.client.calendar.events.delete({
+            'calendarId': this.calendar,
             'eventId': eventId
-        })
+        }).then(onSuccess, onError);
     }
 
     getCalendars(callback) {

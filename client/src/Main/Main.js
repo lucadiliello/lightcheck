@@ -26,8 +26,12 @@ class Main extends Component {
             value: undefined,
             fresh: false
         },
+        legend: false,
         visibility: 'all',
-        route: [],
+        trip: {
+            route: [],
+            details: undefined
+        },
         mode: 'info'
     };
 
@@ -40,6 +44,8 @@ class Main extends Component {
         this.setRoute = this.setRoute.bind(this);
         this.switchMode = this.switchMode.bind(this);
         this.refresh = this.refresh.bind(this);
+        this.switchLegend = this.switchLegend.bind(this);
+        this.updateDetails = this.updateDetails.bind(this);
 
         socket.on('init', (data) => {
             this.setState({
@@ -49,13 +55,6 @@ class Main extends Component {
 
         socket.on('update', (data) => {
             this.state.lamps.find((a) => a._id === data._id).update(data);
-        });
-
-        socket.on('add', (data) => {
-            this.setState({
-                ...this.state,
-                lamps: this.state.lamps.concat([data])
-            });
         });
     }
 
@@ -74,17 +73,37 @@ class Main extends Component {
         });
     }
 
-    setRoute(_route) {
+    setRoute(_route, callback) {
         this.setState({
             ...this.state,
-            route: _route
-        });
+            trip: {
+                ...this.state.trip,
+                route: _route,
+            }
+        }, callback);
+    }
+
+    updateDetails(_details, callback){
+        this.setState({
+            ...this.state,
+            trip: {
+                ...this.state.trip,
+                details: _details,
+            }
+        }, callback);
     }
 
     updateVisibility(choice) {
         this.setState({
             ...this.state,
             visibility: choice
+        });
+    }
+
+    switchLegend(){
+        this.setState({
+            ...this.state,
+            legend: !this.state.legend
         });
     }
 
@@ -110,47 +129,60 @@ class Main extends Component {
 
     render() {
         return (
-            <div>
-                <Intestation/>
-                <Segment attached>
-                    <Grid textAlign="center" stackable>
-                        <Grid.Row columns="2">
-                            <Grid.Column width={13}>
-                                <OpenMap
-                                    zoom={config.initialZoom}
-                                    route={this.state.route}
-                                    lamps={this.state.lamps}
-                                    set={this.set}
-                                    visibility={this.state.visibility}
-                                    mode={this.state.mode}/>
-                            </Grid.Column>
-                            <Grid.Column width={3}>
-                                <Statistics lamps={this.state.lamps}/>
-                                <Manage lamps={this.state.lamps} update={this.updateVisibility}/>
-                                <Info
-                                    lamps={this.state.lamps}
-                                    selected={this.state.selected}/>
-                            </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Grid.Column width={8}>
-                                <Trips
-                                    center={this.state.center}
-                                    set={this.setRoute}
-                                    lamps={this.state.lamps}
-                                    selected={this.state.selected}
-                                    switch={this.switchMode}
-                                    mode={this.state.mode}
-                                    reset={this.reset}/>
-                            </Grid.Column>
-                            <Grid.Column width={8}>
-                                <Calendar/>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
-                </Segment>
-                <Footer/>
-            </div>
+            <Segment >
+                <Grid stackable className='main'>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Intestation/>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row columns="2">
+                        <Grid.Column width={13}>
+                            <OpenMap
+                                zoom={config.initialZoom}
+                                route={this.state.trip.route}
+                                lamps={this.state.lamps}
+                                set={this.set}
+                                visibility={this.state.visibility}
+                                mode={this.state.mode}
+                                legend={this.state.legend}
+                                updateDetails={this.updateDetails}/>
+                        </Grid.Column>
+                        <Grid.Column width={3}>
+                            <Statistics lamps={this.state.lamps}/>
+                            <Manage
+                                lamps={this.state.lamps}
+                                updateVisibility={this.updateVisibility}
+                                legend={this.state.legend}
+                                switchLegend={this.switchLegend}/>
+                            <Info
+                                lamps={this.state.lamps}
+                                selected={this.state.selected}/>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column width={8}>
+                            <Trips
+                                set={this.setRoute}
+                                lamps={this.state.lamps}
+                                selected={this.state.selected}
+                                switch={this.switchMode}
+                                mode={this.state.mode}
+                                reset={this.reset}/>
+                        </Grid.Column>
+                        <Grid.Column width={8}>
+                            <Calendar
+                                trip={this.state.trip}
+                                set={this.setRoute}/>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Footer/>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Segment>
         );
     }
 }

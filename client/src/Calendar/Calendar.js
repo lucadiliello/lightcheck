@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import ApiCalendar from './ApiCalendar';
-import { Segment, Header, Form, Popup } from 'semantic-ui-react';
+import { Segment, Header, Form, Popup, Divider, Message, List, Button } from 'semantic-ui-react';
 import { DateTimeInput, TimeInput } from 'semantic-ui-calendar-react';
 import moment from 'moment';
+import momentDurationFormatSetup from "moment-duration-format";
+
+momentDurationFormatSetup(moment);
 
 class Calendar extends Component {
 
@@ -13,17 +16,22 @@ class Calendar extends Component {
         },
         signed: ApiCalendar.sign,
         start_time: '',
-        fix_time: '30:00'
+        fix_time: '',
+        events: [],
+        loadingLogin: false,
+        loadingAdd: false
     }
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.updateCalendars = this.updateCalendars.bind(this);
         this.updateSignedStatus = this.updateSignedStatus.bind(this);
         this.getCalendars = this.getCalendars.bind(this);
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
         this.addEvent = this.addEvent.bind(this);
+        this.createFixEvent = this.createFixEvent.bind(this);
+        this.deleteEvent = this.deleteEvent.bind(this);
 
         ApiCalendar.onLoad(() => {
             ApiCalendar.listenSign(this.updateSignedStatus);
@@ -36,16 +44,24 @@ class Calendar extends Component {
     updateSignedStatus() {
         this.setState({
             ...this.state,
-            signed: ApiCalendar.sign
+            signed: ApiCalendar.sign,
+            loadingLogin: false
         });
     }
 
     login() {
-        ApiCalendar.handleAuthClick();
+        this.setState({
+            ...this.state,
+            loadingLogin: true
+        }, () => ApiCalendar.handleAuthClick());
+
     }
 
     logout() {
-        ApiCalendar.handleSignoutClick();
+        this.setState({
+            ...this.state,
+            loadingLogin: true
+        }, () => ApiCalendar.handleSignoutClick());
     }
 
     /* CALENDAR SELECTION */
@@ -76,36 +92,61 @@ class Calendar extends Component {
         return this.state.calendars.list.map((a) => ({text: a.summary, value: a.id}));
     }
 
-    getUpcomingEvents(){
-        if(ApiCalendar.sign){
-            ApiCalendar.listUpcomingEvents(10)
-                .then((result) => {
-                    console.log(result);
-                });
-        }
+    createFixEvent(){
+        this.setState({
+            ...this.state,
+            loadingAdd: true
+        }, () => {
+            let trip_time = moment.duration(this.state.fix_time, 'mm:ss').asSeconds() * this.props.trip.route.length + this.props.trip.details.summary.totalTime;
+            let start = moment(this.state.start_time, 'DD-MM-YYYY hh:mm');
+            let end = moment(this.state.start_time, 'DD-MM-YYYY hh:mm').add(trip_time, 'seconds');
+
+            let duration = moment.duration(end.diff(start)).format("h [hrs], m [min]");
+            let length = (this.props.trip.details.summary.totalDistance / 1000).toFixed(3);
+            let description = "Fix event through: " + this.props.trip.route.map((a) => a.address).join(", ") + ` | Duration: ${duration}, Length: ${length}km`;
+
+            this.addEvent({
+                startTime: start,
+                endTime: end,
+                route: this.props.trip.route.slice(0),
+                description: description
+            });
+        });
     }
 
-    addEvent() {
-        let target = moment(this.state.start_time, 'dd-mm-yyyy hh:mm');
-
+    /**
+     * Insert a new event in Google Calendar
+     * @param {event} event Event object should have a startTime, an endTime and a description
+     */
+    addEvent(_event){
         ApiCalendar.createEvent({
             start: {
-                dateTime: target.format("YYYY-MM-DDTHH:mm:ssZ")
+                dateTime: _event.startTime.format("YYYY-MM-DDTHH:mm:ssZ")
             },
             end: {
-                dateTime: target.add(2, 'hours').format("YYYY-MM-DDTHH:mm:ssZ")
+                dateTime: _event.endTime.format("YYYY-MM-DDTHH:mm:ssZ")
             },
-            summary: "Meet with Passerini"
+            summary: _event.description
 
-        }).then((result: object) => {
-            console.log(result);
-        }).catch((error: any) => {
+        }).then((result) => {
+            _event.id = result.result.id;
+            this.setState({
+                ...this.state,
+                events: this.state.events.concat([_event]),
+                loadingAdd: false
+            })
+        }).catch((error) => {
             console.log(error);
         });
     }
 
     deleteEvent(eventId) {
-        ApiCalendar.deleteEvent(eventId);
+        ApiCalendar.deleteEvent(eventId, () => {
+            this.setState({
+                ...this.state,
+                events: this.state.events.filter((e) => e.id !== eventId)
+            })
+        }, (err) => console.log(err));
     }
 
     render() {
@@ -116,11 +157,11 @@ class Calendar extends Component {
                 </Header>
                 <Form>
                     <Form.Group widths='equal'>
-                        <Form.Button fluid onClick={this.login} primary disabled={this.state.signed}>
-                            Login
+                        <Form.Button fluid onClick={this.state.signed ? this.logout : this.login} primary inverted={this.state.signed} loading={this.state.loadingLogin}>
+                            {this.state.signed ? "Logout" : "Login"}
                         </Form.Button>
-                        <Form.Button fluid onClick={this.logout} primary disabled={!this.state.signed}>
-                            Logout
+                        <Form.Button fluid onClick={this.createFixEvent} primary disabled={!(this.state.start_time && this.props.trip.details && (this.props.trip.route.length > 0))}>
+                            Add
                         </Form.Button>
                     </Form.Group>
                     <Form.Group>
@@ -143,9 +184,10 @@ class Calendar extends Component {
                                    })
                             }/>
                         <TimeInput
-                            label='Estimated time for fixing a lamp'
+                            label='Estimated time to fix a lamp'
                             value={this.state.fix_time}
                             iconPosition="left"
+                            placeholder='select hours and minutes'
                             onChange={
                                (event, {name, value}) =>
                                    this.setState({
@@ -154,15 +196,30 @@ class Calendar extends Component {
                                    })
                             }/>
                     </Form.Group>
-                    <Form.Group widths='equal'>
-                        <Form.Button fluid onClick={this.addEvent} primary disabled={!this.state.start_time}>
-                            Add
-                        </Form.Button>
-                        <Form.Button fluid onClick={this.getUpcomingEvents} primary>
-                            Get
-                        </Form.Button>
-                    </Form.Group>
                 </Form>
+                <Divider/>
+                <List className='trip-list'>
+                    {this.state.events.map((ev, i) =>
+                        (<List.Item key={i}>
+                            <Message>
+                                <Message.Header>
+                                    <Button
+                                        icon='delete' circular
+                                        size='small' color='red'
+                                        onClick={() => this.deleteEvent(ev.id)}/>
+
+                                    <Button icon='angle double up' circular
+                                            size='small' color='teal'
+                                            onClick={() => this.props.set(ev.route)}/>
+
+                                </Message.Header>
+                                    <p>
+                                        {ev.description}
+                                    </p>
+                              </Message>
+                           </List.Item>))
+                    }
+                </List>
             </Segment>
         );
     }

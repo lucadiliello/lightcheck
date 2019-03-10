@@ -9,6 +9,7 @@
     "leaflet": "^1.4.0",
     "leaflet-routing-machine": "^3.2.12",
     "moment": "^2.24.0",
+    "moment-duration-format": "^2.2.2",
     "nominatim-browser": "^2.0.2",
     "react": "^16.8.2",
     "react-activity": "^1.2.2",

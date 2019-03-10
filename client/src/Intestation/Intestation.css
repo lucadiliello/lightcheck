@@ -1,12 +1,9 @@
 .intestation {
-    background-color: inherit;
-    color: white;
     height: 100px;
+    width: 100%;
 }
 
 .main-header {
-    height: 100%;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

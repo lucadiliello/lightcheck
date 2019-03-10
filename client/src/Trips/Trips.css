@@ -7,3 +7,7 @@
 .trip-item {
     height: 60px;
 }
+
+.trip-header {
+    text-align: center;
+}

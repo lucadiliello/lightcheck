@@ -10,10 +10,10 @@ class Routing extends MapLayer {
 
     componentDidUpdate(prevProps, prevState) {
         if (!this.arraysEqual(prevProps.road, this.props.road)) {
-            this.state.leafletElement.setWaypoints(this.props.road);
+            this.state.leafletElement.setWaypoints(this.props.road.map((point, i) => L.latLng(point.lat, point.lng)));
         }
-        if(this.props.road.length === 0) this.state.leafletElement.hide();
-        else this.state.leafletElement.show();
+        if(this.props.legend) this.state.leafletElement.show();
+        else this.state.leafletElement.hide();
     }
 
     arraysEqual(arr1, arr2) {
@@ -45,16 +45,18 @@ class Routing extends MapLayer {
             })
         })
         .on('routingstart', () => {})
-        .on('routesfound routingerror', () => {})
+        .on('routesfound', (ev) => this.props.updateDetails(ev.routes[0]))
         .addTo(this.props.map.current.leafletElement);
 
         this.state = {
             leafletElement: leafletElement
         }
-        leafletElement.hide();
+        if(this.props.legend) leafletElement.show();
+        else leafletElement.hide();
 
         return leafletElement.getPlan();
     }
+
 }
 
 export default withLeaflet(Routing);

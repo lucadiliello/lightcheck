@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Header, Label, List } from 'semantic-ui-react';
+import { Segment, Header, Label, List, Message } from 'semantic-ui-react';
 import './Info.css';
 
 class Manage extends Component {
@@ -17,7 +17,7 @@ class Manage extends Component {
 
     getPosition(){
         if (this.props.selected.value){
-            return `Lat:${this.props.selected.value.lat} - Lng:${this.props.selected.value.lng}`;
+            return `Lat:${this.props.selected.value.lat} \n Lng:${this.props.selected.value.lng}`;
         }
         return "No point selected";
     }
@@ -25,19 +25,29 @@ class Manage extends Component {
     render() {
         return (
             <Segment>
-                <Header as='h2' className='info-header'>
+                <Header as='h2'>
                     Lamp Info
                 </Header>
-                <List className='info-list'>
+                <List>
                     <List.Item>
-                        <Label color='teal' horizontal>
-                            Address:
-                        </Label>{this.getAddress()}
+                        <Message>
+                            <Message.Header>
+                                <Label color='teal' horizontal>
+                                    Address
+                                </Label>
+                            </Message.Header>
+                            {this.getAddress()}
+                        </Message>
                     </List.Item>
                     <List.Item>
-                        <Label color='teal' horizontal>
-                            Position:
-                        </Label>{this.getPosition()}
+                        <Message>
+                            <Message.Header>
+                                <Label color='teal' horizontal>
+                                    Position
+                                </Label>
+                            </Message.Header>
+                            {this.getPosition()}
+                        </Message>
                     </List.Item>
                 </List>
             </Segment>

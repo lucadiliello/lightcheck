@@ -46,9 +46,11 @@ class OpenMap extends Component {
                             map={this.map}/>
                     )}
                     <Routing
-                        color="blue"
+                        color="#2E0240"
                         map={this.map}
                         road={this.props.route}
+                        legend={this.props.legend}
+                        updateDetails={this.props.updateDetails}
                     />
                 </Map>
             </div>);

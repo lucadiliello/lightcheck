@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Segment, Header, Button, Popup, List, Label, Form, Divider, Grid, Message } from 'semantic-ui-react';
+import { Segment, Header, Button, Popup, List, Label, Form, Grid, Message } from 'semantic-ui-react';
 import './Trips.css';
 import axios from 'axios';
-import L from 'leaflet';
 
 const config = require('../Config/config.json');
 
@@ -10,6 +9,7 @@ class Trips extends Component {
 
     state = {
         selection: [],
+        details: undefined,
         loading: false,
         startFromWarehouse: true
     }
@@ -23,6 +23,7 @@ class Trips extends Component {
         this.clear = this.clear.bind(this);
         this.autoSelect = this.autoSelect.bind(this);
         this.getWarehouse = this.getWarehouse.bind(this);
+        this.setRoute = this.setRoute.bind(this);
     }
 
     componentDidUpdate(){
@@ -70,12 +71,13 @@ class Trips extends Component {
     }
 
     optimiseList(){
-        var request = config.osrm_server + '/trip/v1/driving/';
+        let request = config.osrm_server + '/trip/v1/driving/';
         let warehouse = this.getWarehouse();
         if(this.state.startFromWarehouse && warehouse) request += `${warehouse.lat},${warehouse.lng};`;
         request += this.state.selection.map((e) => `${e.lng},${e.lat}`).join(';');
         request += '?source=first';
         if(this.state.startFromWarehouse && warehouse) request += '&roundtrip=true';
+        console.log(request);
         this.setState({
             ...this.state,
             loading: true
@@ -92,18 +94,23 @@ class Trips extends Component {
                 this.setState({
                     ...this.state,
                     loading: false,
-                    selection: indexes.map((object, i) => this.state.selection[object])
-                }, () => this.props.set(this.getRoute()));
+                    selection: indexes.map((object, i) => this.state.selection[object]),
+                });
             })
         );
     }
 
-    getRoute(){
-        let warehouse = (a => L.latLng(a.lat, a.lng))(this.getWarehouse());
-        let base = this.state.selection.map((point, i) => L.latLng(point.lat, point.lng));
-        return this.state.startFromWarehouse ?
-            [warehouse].concat(base).concat([warehouse]) :
-            base;
+    setRoute() {
+        let warehouse = this.getWarehouse();
+        let trip = this.state.startFromWarehouse ? [warehouse].concat(this.state.selection).concat([warehouse]) : this.state.selection;
+
+        this.setState({
+            ...this.state,
+            loading: true
+        }, this.props.set(trip, () => this.setState({
+            ...this.state,
+            loading: false
+        })));
     }
 
     autoSelect(){
@@ -116,10 +123,10 @@ class Trips extends Component {
     render(){
         return (
             <Segment textAlign='left'>
-                <Header as='h2' textAlign="center">
+                <Header as='h2' className='trip-header'>
                     Generate a Trip
                 </Header>
-                <Grid>
+                <Grid stackable>
                     <Grid.Row>
                         <Grid.Column width={6}>
                             <Segment>
@@ -145,9 +152,15 @@ class Trips extends Component {
                                         fluid onClick={this.optimiseList}
                                         primary loading={this.state.loading}
                                         disabled={!((this.state.selection.length > 0 && this.state.startFromWarehouse) || this.state.selection.length > 1)}>
-                                        Generate Route
+                                        Optimize Route
                                     </Form.Button>
-                                    <Form.Button fluid onClick={this.clear} color='red' disabled={this.state.selection.length === 0}>
+                                    <Form.Button
+                                        fluid onClick={this.setRoute}
+                                        primary loading={this.state.loading}
+                                        disabled={!((this.state.selection.length > 0 && this.state.startFromWarehouse) || this.state.selection.length > 1)}>
+                                        Set Route
+                                    </Form.Button>
+                                    <Form.Button fluid onClick={this.clear} color='red'>
                                         Clear
                                     </Form.Button>
                                 </Form>
