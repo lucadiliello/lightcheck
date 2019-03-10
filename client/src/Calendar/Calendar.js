@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ApiCalendar from './ApiCalendar';
-import { Segment, Header, Form, Popup, Divider, Message, List, Button } from 'semantic-ui-react';
+import { Segment, Header, Form, Popup, Divider, Message, List, Button, Label } from 'semantic-ui-react';
 import { DateTimeInput, TimeInput } from 'semantic-ui-calendar-react';
 import moment from 'moment';
 import momentDurationFormatSetup from "moment-duration-format";
@@ -198,28 +198,34 @@ class Calendar extends Component {
                     </Form.Group>
                 </Form>
                 <Divider/>
-                <List className='trip-list'>
-                    {this.state.events.map((ev, i) =>
-                        (<List.Item key={i}>
-                            <Message>
-                                <Message.Header>
-                                    <Button
-                                        icon='delete' circular
-                                        size='small' color='red'
-                                        onClick={() => this.deleteEvent(ev.id)}/>
+                <div style={{textAlign: 'center'}}>
+                {
+                    this.state.events.length > 0 ?
+                    (
+                        <List className='trip-list'>
+                            {this.state.events.map((ev, i) =>
+                                (<List.Item key={i}>
+                                    <Message>
+                                        <Message.Header>
+                                            <Button
+                                                icon='delete' circular
+                                                size='small' color='red'
+                                                onClick={() => this.deleteEvent(ev.id)}/>
 
-                                    <Button icon='angle double up' circular
-                                            size='small' color='teal'
-                                            onClick={() => this.props.set(ev.route)}/>
+                                            <Button icon='angle double up' circular
+                                                    size='small' color='teal'
+                                                    onClick={() => this.props.set(ev.route)}/>
 
-                                </Message.Header>
-                                    <p>
-                                        {ev.description}
-                                    </p>
-                              </Message>
-                           </List.Item>))
+                                        </Message.Header>
+                                            <p>
+                                                {ev.description}
+                                            </p>
+                                      </Message>
+                                   </List.Item>
+                               ))
+                        }</List>) : <Label>No event in memory</Label>
                     }
-                </List>
+                    </div>
             </Segment>
         );
     }

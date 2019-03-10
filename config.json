@@ -1,6 +1,5 @@
 {
     "db_url": "mongodb+srv://lucadiliello:maiale23@cluster0-vccud.mongodb.net/admin",
     "db_name": "lightcheck",
-    "default_server": "http://localhost:5000",
-    "default_server_port": 5000
+    "default_server_port": 81
 }

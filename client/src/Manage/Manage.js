@@ -36,7 +36,7 @@ class Manage extends Component {
                         <Button size='small' fluid color='red' inverted disabled={this.state.status === 'dead'} onClick={() => this.handleClick('dead')}>Dead</Button>
                     </Segment>
                     <Segment>
-                        <Button size='small' basic inverted={this.props.legend} color='violet' fluid onClick={this.props.switchLegend}>{this.props.legend ? 'Hide Legend' : 'Show Legend'}</Button>
+                        <Button disabled={this.props.trip.route.length === 0} size='small' basic inverted={this.props.legend} color='violet' fluid onClick={this.props.switchLegend}>{this.props.legend ? 'Hide Legend' : 'Show Legend'}</Button>
                     </Segment>
             </Segment>
         );

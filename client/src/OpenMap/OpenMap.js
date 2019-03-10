@@ -33,7 +33,7 @@ class OpenMap extends Component {
                     ref={this.map}>
                     <TileLayer
                         attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> Hosted with <3 by Luca Di Liello"
-                        url={config.tile_server}
+                        url={config.tile_server + '/osm_tiles/{z}/{x}/{y}.png'}
                     />
 
                     {this.props.lamps.map( (point, i) =>

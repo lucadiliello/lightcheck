@@ -154,7 +154,8 @@ class Main extends Component {
                                 lamps={this.state.lamps}
                                 updateVisibility={this.updateVisibility}
                                 legend={this.state.legend}
-                                switchLegend={this.switchLegend}/>
+                                switchLegend={this.switchLegend}
+                                trip={this.state.trip}ì/>
                             <Info
                                 lamps={this.state.lamps}
                                 selected={this.state.selected}/>

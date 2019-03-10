@@ -134,6 +134,7 @@ class Trips extends Component {
                                     <Form.Button fluid onClick={this.props.switch} color={this.props.mode === 'selection' ? 'red' : 'blue'}>
                                         {this.props.mode === 'selection' ? 'Stop selection' : 'Start selection'}
                                     </Form.Button>
+
                                     <Popup trigger={<Form.Button fluid onClick={this.autoSelect} primary>
                                         Auto select
                                     </Form.Button>} content='Automatically select all non-working lamps'/>
@@ -167,33 +168,38 @@ class Trips extends Component {
                             </Segment>
                         </Grid.Column>
                         <Grid.Column width={10}>
-                            <List className='trip-list'>
-                                {this.state.selection.map((point, i) =>
-                                    (<List.Item key={i}>
-                                        <Message>
-                                            <Message.Header>
-                                                <Label circular content={'N. ' + i}/>
-                                                <Label circular color={point.status === 'working' ? 'green' : (point.status === 'broken' ? 'yellow' : 'red')}>
-                                                    {point.status.replace(/^\w/, c => c.toUpperCase())}
-                                                </Label>
-                                                <Button
-                                                    icon='delete' circular compact
-                                                    size='small' color='teal'
-                                                    onClick={() => this.remove(point)}/>
-                                                <Button icon='angle up' circular compact disabled={!(i > 0)}
-                                                    size='small' color='teal'
-                                                    onClick={() => this.move(i, 'up')}/>
-                                                <Button icon='angle down' circular compact disabled={!(i < (this.state.selection.length - 1))}
-                                                    size='small' color='teal'
-                                                    onClick={() => this.move(i, 'down')}/>
-                                            </Message.Header>
-                                                <p>
-                                                    {point.address}
-                                                </p>
-                                          </Message>
-                                       </List.Item>))
-                                }
-                            </List>
+                            {this.state.selection.length > 0 ?
+                                (
+                                    <List className='trip-list'>
+                                        {this.state.selection.map((point, i) =>
+                                            (<List.Item key={i}>
+                                                <Message>
+                                                    <Message.Header>
+                                                        <Label circular content={'N. ' + i}/>
+                                                        <Label circular color={point.status === 'working' ? 'green' : (point.status === 'broken' ? 'yellow' : 'red')}>
+                                                            {point.status.replace(/^\w/, c => c.toUpperCase())}
+                                                        </Label>
+                                                        <Button
+                                                            icon='delete' circular compact
+                                                            size='small' color='teal'
+                                                            onClick={() => this.remove(point)}/>
+                                                        <Button icon='angle up' circular compact disabled={!(i > 0)}
+                                                            size='small' color='teal'
+                                                            onClick={() => this.move(i, 'up')}/>
+                                                        <Button icon='angle down' circular compact disabled={!(i < (this.state.selection.length - 1))}
+                                                            size='small' color='teal'
+                                                            onClick={() => this.move(i, 'down')}/>
+                                                    </Message.Header>
+                                                        <p>
+                                                            {point.address}
+                                                        </p>
+                                                  </Message>
+                                               </List.Item>))
+                                        }
+                                    </List>
+                                ) :  <Label>No route selected</Label>
+
+                            }
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

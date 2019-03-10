@@ -9,7 +9,7 @@ const axios = require('axios');
 const positions = require('./positions.json');
 const config = require('./config.json');
 
-axios.defaults.baseURL = config.default_server;
+axios.defaults.baseURL = 'http://localhost:' + config.default_server_port;
 
 class Sensor {
     constructor(data) {
