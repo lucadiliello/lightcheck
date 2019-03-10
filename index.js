@@ -3,6 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 const config = require('./config.json');
 const mongodb = require('mongodb');
+const path = require('path');
 
 var io = require('socket.io')(http, { pingTimeout: 60000 });
 
@@ -109,12 +110,12 @@ app.put('/devices/:id', (req, res) => {
 });
 
 
-//// SEND DEFAULT REACT BUNDLE //////
-app.get('/', (req, res) => {
-    console.log("Sending bundle react " + __dirname);
-    res.sendFile(__dirname + '/client/build/index.html');
-});
-
+//Static file declaration
+app.use(express.static(path.join(__dirname, 'client/build')));
+//build mode
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/public/index.html'));
+})
 
 
 // Starting the development server

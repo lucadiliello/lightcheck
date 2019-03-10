@@ -1,5 +1,5 @@
 {
-    "default_server": "http://lucadiliello.ddns.net:81",
+    "default_server": "http://localhost:5000",
     "tile_server": "http://lucadiliello.ddns.net:82",
     "osrm_server": "http://lucadiliello.ddns.net:83",
     "initialZoom": 15
