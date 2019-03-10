@@ -1,6 +1,6 @@
 {
-    "default_server": "http://lightcheck.lucadiliello.it",
-    "tile_server": "http://tiles.lucadiliello.it",
-    "osrm_server": "http://osrm.lucadiliello.it",
+    "default_server": "http://lucadiliello.ddns.net:81",
+    "tile_server": "http://lucadiliello.ddns.net:82",
+    "osrm_server": "http://lucadiliello.ddns.net:83",
     "initialZoom": 15
 }
