@@ -6,9 +6,9 @@ import './Statistics.css';
 class Statistics extends Component {
 
     getNumberInStatus(status){
-        return this.props.lamps
+        return this.props.lamps.length > 0 ? this.props.lamps
             .map((object, i) => object.status === status ? 1 : 0)
-            .reduce((a,b) => a + b);
+            .reduce((a,b) => a + b) : 0;
     }
 
     // TODO: Lampadine cambiate all'anno
