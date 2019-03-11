@@ -1,8 +1,8 @@
-## lightcheck
+# lightcheck
 
 Progect developed by Luca Di Liello for the IoT course by the University of Trento.
 
-# How to
+## How to
 
 - Reach the main folder `lightcheck`
 
@@ -34,7 +34,7 @@ cd client
 npm run start
 ```
 
-# Other utilities
+## Other utilities
 
 - Reset the database:
 ```
