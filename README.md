@@ -42,6 +42,6 @@ npm run start
 node reset_db.js
 ```
 
-- To change tile and osrm server for OpenStreetMaps edit the files `config.json` and `client/src/Config/config.json`
+- To change the tiles and osrm server addresses, edit `config.json` and `client/src/Config/config.json`
 
 - Enjoy 
