@@ -22,6 +22,7 @@ cd ..
 ```
 npm run start
 ```
+wait until it is connected to the database.
 
 - Launch the simulator with:
 ```
