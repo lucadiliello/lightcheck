@@ -136,6 +136,11 @@ class Main extends Component {
                             <Intestation/>
                         </Grid.Column>
                     </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Statistics lamps={this.state.lamps}/>
+                        </Grid.Column>
+                    </Grid.Row>
                     <Grid.Row columns="2">
                         <Grid.Column width={13}>
                             <OpenMap
@@ -149,7 +154,6 @@ class Main extends Component {
                                 updateDetails={this.updateDetails}/>
                         </Grid.Column>
                         <Grid.Column width={3}>
-                            <Statistics lamps={this.state.lamps}/>
                             <Manage
                                 lamps={this.state.lamps}
                                 updateVisibility={this.updateVisibility}

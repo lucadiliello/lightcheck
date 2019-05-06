@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Header, Progress, Label } from 'semantic-ui-react';
+import { Segment, Header, Progress, Label, Grid } from 'semantic-ui-react';
 import { Digital } from 'react-activity';
 import './Statistics.css';
 
@@ -23,32 +23,46 @@ class Statistics extends Component {
                 </Header>
 
                 {this.props.lamps ?
-                    <div>
-                        <Label circular color='teal'
-                            content={"Warehouses: " + this.getNumberInStatus('main')}>
-                        </Label>
-                        <Progress
-                            className='progress-bar'
-                            progress='value' success active
-                            value={this.getNumberInStatus('working')}
-                            total={this.props.lamps.length}>
-                            Working
-                        </Progress>
-                        <Progress
-                            className='progress-bar'
-                            progress='value' warning active
-                            value={this.getNumberInStatus('broken')}
-                            total={this.props.lamps.length}>
-                            Broken
-                        </Progress>
-                        <Progress
-                            className='progress-bar'
-                            progress='value' error active
-                            value={this.getNumberInStatus('dead')}
-                            total={this.props.lamps.length}>
-                            Dead
-                        </Progress>
-                    </div> :  <Digital />}
+                    <Grid stackable>
+                        <Grid.Row columns="4">
+                            <Grid.Column width={4}>
+                                <Progress
+                                    className='progress-bar'
+                                    progress='value' color='brown' active
+                                    value={this.getNumberInStatus('main')}
+                                    total={5}>
+                                    Active warehouses
+                                </Progress>
+                            </Grid.Column>
+                            <Grid.Column width={4}>
+                                <Progress
+                                    className='progress-bar'
+                                    progress='value' success active
+                                    value={this.getNumberInStatus('working')}
+                                    total={this.props.lamps.length}>
+                                    Working lamps
+                                </Progress>
+                            </Grid.Column>
+                            <Grid.Column width={4}>
+                                <Progress
+                                    className='progress-bar'
+                                    progress='value' warning active
+                                    value={this.getNumberInStatus('broken')}
+                                    total={this.props.lamps.length}>
+                                    Broken lamps
+                                </Progress>
+                            </Grid.Column>
+                            <Grid.Column width={4}>
+                                <Progress
+                                    className='progress-bar'
+                                    progress='value' error active
+                                    value={this.getNumberInStatus('dead')}
+                                    total={this.props.lamps.length}>
+                                    Dead lamps
+                                </Progress>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid> :  <Digital />}
             </Segment>
         );
     }
