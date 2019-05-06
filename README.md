@@ -22,6 +22,7 @@ cd ..
 ```
 npm run start
 ```
+wait until it is connected to the database.
 
 - Launch the simulator with:
 ```
@@ -34,7 +35,7 @@ cd client
 npm run start
 ```
 
-# Other utilities
+## Other utilities
 
 - Reset the database:
 ```
