@@ -168,6 +168,9 @@ class Trips extends Component {
                             </Segment>
                         </Grid.Column>
                         <Grid.Column width={10}>
+                            {this.state.selection.length > 12 ? <Label color='red'>
+                                A Route through more than 12 points can be really slow to be computed. Please remove some steps.
+                            </Label> : null}
                             {this.state.selection.length > 0 ?
                                 (
                                     <List className='trip-list'>

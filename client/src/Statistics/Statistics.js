@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Header, Progress, Label, Grid } from 'semantic-ui-react';
+import { Segment, Header, Progress, Grid } from 'semantic-ui-react';
 import { Digital } from 'react-activity';
 import './Statistics.css';
 

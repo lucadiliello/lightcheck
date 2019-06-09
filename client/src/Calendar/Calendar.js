@@ -36,7 +36,7 @@ class Calendar extends Component {
         ApiCalendar.onLoad(() => {
             ApiCalendar.listenSign(this.updateSignedStatus);
             this.updateSignedStatus();
-            this.updateCalendars();
+            if(ApiCalendar.sign) this.updateCalendars();
         });
     }
 
@@ -53,15 +53,15 @@ class Calendar extends Component {
         this.setState({
             ...this.state,
             loadingLogin: true
-        }, () => ApiCalendar.handleAuthClick());
+        }, ApiCalendar.handleAuthClick);
 
     }
 
-    logout() {
+    logout() {        
         this.setState({
             ...this.state,
             loadingLogin: true
-        }, () => ApiCalendar.handleSignoutClick());
+        }, ApiCalendar.handleSignoutClick);
     }
 
     /* CALENDAR SELECTION */
@@ -160,14 +160,14 @@ class Calendar extends Component {
                         <Form.Button fluid onClick={this.state.signed ? this.logout : this.login} primary inverted={this.state.signed} loading={this.state.loadingLogin}>
                             {this.state.signed ? "Logout" : "Login"}
                         </Form.Button>
-                        <Form.Button fluid onClick={this.createFixEvent} primary disabled={!(this.state.start_time && this.props.trip.details && (this.props.trip.route.length > 0))}>
+                        <Form.Button fluid onClick={this.createFixEvent} primary disabled={!(this.state.start_time && this.props.trip.details && (this.props.trip.route.length > 0) && this.state.signed)}>
                             Add
                         </Form.Button>
                     </Form.Group>
                     <Form.Group>
                         <Form.Dropdown width={13} placeholder='Using default calendar' fluid selection options={this.getCalendars()} onChange={this.setCalendar}/>
                         <Popup content='Update calendar list' trigger={
-                            <Form.Button fluid width={3} icon='refresh' onClick={this.updateCalendars} loading={this.state.calendars.loading} primary/>
+                            <Form.Button fluid width={3} icon='refresh' disabled={!this.state.signed} onClick={this.updateCalendars} loading={this.state.calendars.loading} primary/>
                         }/>
                     </Form.Group>
                     <Form.Group widths='equal'>
