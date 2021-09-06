@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.2",
     "esri-leaflet-geocoder": "^2.2.13",
     "google-map-react": "^1.1.2",
     "leaflet": "^1.4.0",
